@@ -1,0 +1,18 @@
+<import src="../../public/toast.wxml"/>
+
+<scroll-view class="container">
+  <template is="toast" wx:if="{{toastMsg}}" data="{{toastMsg}}"/>
+  <view class='easypayBox' style='height: {{_height}}px;'>
+    <view class='headerLogo'></view>
+    <view class='storeWithInput'>
+      <view class='storeName'>{{store.name || "门店的名字"}}</view>
+      <view class='inputMoney'>
+        <text class='moneySign'>¥</text>
+        <input bindinput='setMoneyToPay' value='{{moneyToPay}}' focus='{{true}}' maxlength="8" type='digit' placeholder='0.00'></input>
+      </view>
+    </view>
+    <view class='submit splitTop'>
+      <view bindtap='getPayInfo'>{{onRequest ? "请求支付中..." : "确认支付"}}</view>
+    </view>
+  </view>
+</scroll-view>

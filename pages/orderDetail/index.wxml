@@ -1,0 +1,101 @@
+<import src="../../public/toast.wxml"/>
+<import src="../../public/analytics.wxml"/>
+
+<scroll-view class="container" scroll-y="hidden">
+
+  <template is="toast" wx:if="{{toastMsg}}" data="{{toastMsg}}"/>
+  <template is="analytics" wx:if="{{accUrl}}" data="{{accUrl}}"/>
+
+  <view class="detailBox">
+      
+    <view class="statusBar">
+
+      <view class='statusInfo'>
+        <!-- 订单完成前都按照待取餐展示 -->
+        <text wx:if="{{statusStr != '待取餐'}}">订单{{statusStr ? statusStr : '获取中'}}</text>
+        <text wx:if="{{statusStr == '待取餐'}}">取餐号：{{takeNo}}</text>
+      </view>
+    </view>
+
+    <view class='actionInfo' wx:if="{{showPay || showArrived}}">
+      <view class='cancelOrPay' wx:if="{{showPay}}">
+        <view class='cancel' bindtap='cancelTrade'>取消订单</view>
+        <view style='display: inline-block; width: 25px; height: 1rpx;'></view>
+        <view class='lightOn' bindtap='payTrade'>现在支付</view>
+      </view>
+      <view class='setArrived' bindtap='setArrived' wx:if="{{showArrived}}">
+        <view class='lightOn'>我已到达</view>
+      </view>
+    </view>
+
+    <view class='takeNo splitTop' wx:if="{{showTakeNo && (statusStr != '待取餐')}}">
+      <text>取餐号：</text> {{takeNo}}
+    </view>
+
+    <view class="tradeDetail">
+      <!-- <view class="storeName" bindtap='toStore' data-store='{{store}}'> -->
+      <view class="storeName">
+        <image class="storeIcon" src="../../static/store.png" />
+        {{store.name}}
+      </view>
+      <view class="goodsList">
+        <view class="goodsItem" wx:for="{{products}}" wx:key="product" wx:for-index="specid" wx:for-item="spec">
+          <image class="goodsLogo" mode="aspectFill" src="{{spec && spec.frontLogo}}@160w.png"></image>
+          <view class='cartItemName'>{{spec.productName}}</view>
+          <view class='cartItemAmount'>×{{spec.amount}}</view>
+          <view class='cartItemPrice'>
+            <text class="moneySign">¥</text>{{spec.price * spec.amount}}
+          </view>
+        </view>
+      </view>
+      <view class="promationInfo splitTop" wx:if="{{coupon || off}}">
+        <view class='promationItem' wx:if="{{off}}">
+          <text class='offSign'>减</text>
+          <text>{{off.source.name || off.name}}</text>
+          <text class='savePrice'><text class="moneySign">¥</text>-{{off.source.subtract || off.subtract}}</text>
+        </view>
+        <view class='promationItem' wx:if="{{coupon}}">
+          <text class='couponSign'>券</text>
+          <text>{{coupon.name || coupon.source.name}}</text>
+          <text class='savePrice'><text class="moneySign">¥</text>-{{coupon.subtract}}</text>
+        </view>
+      </view>
+      <view class="paySummary splitTop">
+        <view class="saveInfo" wx:if="{{savedPrice}}">优惠: <text class="moneySign">¥</text>{{savedPrice}}</view>
+        <view class="payInfo" wx:if="{{paidInAmount}}">
+          实付: <view><text class="moneySign">¥</text>{{paidInAmount}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class='commentThing'>
+      <view class="contactStore" bindtap='makePhoneCall'>
+        <image src="../../static/phone.png"></image>
+        联系客服
+      </view>
+      <view class="commentsInfo splitTop">
+        备注：{{remark || '无'}}
+      </view>
+    </view>
+
+    <view class="tradeExtroInfo">
+      <view class="infoItem">
+        订单编号： <text>{{tradeId}}</text>
+      </view>
+      <view class="infoItem">
+        下单时间： <text>{{createTime}}</text>
+      </view>
+      <view class="infoItem">
+        支付方式： <text>{{payType}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- loading -->
+  <scroll-view class="loading" hidden="{{!loading}}">
+    <view class="loadingBox">
+      <image src="../../static/loading.gif"></image>
+    </view>
+  </scroll-view>
+
+ </scroll-view> 

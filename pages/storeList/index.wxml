@@ -1,0 +1,74 @@
+<import src="../../public/toast.wxml"/>
+<import src="../../public/analytics.wxml"/>
+
+<scroll-view class="container">
+  <template is="toast" wx:if="{{toastMsg}}" data="{{toastMsg}}"/>
+  <template is="analytics" wx:if="{{accUrl}}" data="{{accUrl}}"/>
+  <view class="contentBox">
+    <!-- searchBar -->
+    <view class="searchBar" style="height: {{searchBarHeight}}px;">
+      <input 
+        focus="{{keySearchFocus}}"
+        value="{{searchKey}}"
+        maxlength="220"
+        placeholder="按照位置/路名搜索"
+        placeholder-class="search-placeholder"
+        confirm-type="search"
+        bindinput="searchStore"
+        bindfocus="setSearchType"
+        bindblur="searchInputBulr"
+        style="top: {{searchBarHeight * 0.125}}px; border-radius: {{searchBarHeight * 0.375}}px; height: {{searchBarHeight * 0.75}}px; line-height: {{searchBarHeight * 0.75}}px"
+      />
+      <icon type="search" class="searchIcon" style="top: {{searchBarHeight * 0.325}}px; left: {{searchBarHeight * 0.55}}px" size="{{searchBarHeight * 0.35}}"/>
+    </view>
+    <!-- map search list -->
+    <view class="mapSearch" style="padding-top: {{searchBarHeight}}px" hidden="{{showKeySearchRes}}">
+      <view class="mapBox" style="padding-top: {{mapHeightScale * 100 + '%'}}">
+        <map
+          id="map"
+          longitude="{{location.longitude || 121.473701}}"
+          latitude="{{location.latitude || 31.230416}}"
+          scale="14"
+          markers="{{storeMarkers}}"
+          controls="{{controls}}"
+          bindmarkertap="pickStoreOnMap"
+          bindcontroltap="getCurLocation" 
+          bindregionchange="getMapCenter"
+          show-location="{{true}}"
+        ></map>
+      </view>
+      <scroll-view class="searchResult" scroll-y="hidden" scroll-into-view="item{{lightOnMapItemIndex}}" style="background: #ffffff; height: {{mapSearchHeight}}px;" scroll-with-animation="{{true}}">
+        <view class="storeItem" id="item{{index}}" wx:for="{{searchStores}}" wx:key="lightOnMap" wx:for-index="index" wx:for-item="store">
+          <view class="storeDetail {{store.lightOn ? 'lightOn' : ''}}" bindtap="setStore" data-value="{{store}}">
+            <view class="storeName">{{store && store.name}}</view>
+            <view class="storeDistance" hidden="{{!store || !store.distance}}">{{store && store.distance || 'NaN'}}m</view>
+            <scroll-view scroll-x="hidden" class="storePosition">{{store && store.location}}</scroll-view>
+          </view>
+        </view>
+        <view bindtap="setSearchType" data-type="key" class="toKeySearch" hidden="{{showSearchLoading}}">找不到，尝试直接搜索</view>
+      </scroll-view>
+      <view class="mapSearchLoading" hidden="{{!showSearchLoading}}" style="height: {{mapSearchHeight}}px;">
+        <view class="loadingBox">
+          <image src="../../static/loading.gif"></image>
+        </view>
+      </view>
+    </view>
+    <!-- key search list -->
+    <view class="keySearch" style="padding-top: {{searchBarHeight}}px" hidden="{{!showKeySearchRes}}">
+      <scroll-view class="searchResult" scroll-y="hidden" scroll-into-view="item{{lightOnMapItemIndex}}" style="background: #ffffff; height: {{keySearchHeight}}px;">
+        <view class="storeItem" id="item{{index}}" wx:for="{{searchStores}}" wx:key="lightOnKey" wx:for-index="index" wx:for-item="store">
+          <view class="storeDetail" bindtap="setStore" data-value="{{store}}">
+            <view class="storeName">{{store && store.name}}</view>
+            <scroll-view scroll-x="hidden"  class="storePosition">{{store && store.location}}</scroll-view>
+          </view>
+        </view>
+        <view bindtap="setSearchType" data-type="map" class="toMapSearch" hidden="{{showSearchLoading}}">搜不到，试试地图查找</view>
+      </scroll-view>
+      <view class="mapSearchLoading" hidden="{{!showSearchLoading}}" style="height: {{keySearchHeight}}px;">
+        <view class="loadingBox">
+          <image src="../../static/loading.gif"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,5 @@
+<template name="toast">
+  <view class="toastBox">
+    <text>{{toastMsg}}</text>
+  </view>
+</template>

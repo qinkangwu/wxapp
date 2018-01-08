@@ -1,0 +1,543 @@
+.orderInfo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #ececec;
+  overflow: hidden;
+  box-sizing: border-box;
+} 
+.scrollBox {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.takeInfo {
+  width: 100%;
+  background: #ffffff;
+}
+.takeAddress, .takeTime, .storeName{
+  height: 48px;
+  line-height: 48px;
+  position: relative;
+  padding-left: 48px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.takeTime > text.lightOn {
+  color: #fc661f;
+}
+.takeAddress::after, .goodsItem::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+  right: 2.5%;
+  width: 95%;
+  height: 0rpx;
+  border-bottom: 1rpx solid #eaeaea;
+}
+.takeAddressIcon, .takeTimeIcon, .storeIcon {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  left: 11px;
+  top: 11px;
+}
+.tradeDetail {
+  margin-top: 10px;
+  background: #ffffff;
+}
+.storeIcon {
+  width: 27px;
+  height: 27px;
+  top: 10px;
+  left: 10px;
+}
+.goodsList, .promationInfo {
+  position: relative;
+}
+.storeName {
+  background: #fafafa;
+  border-bottom: 1rpx solid #f8f8f8;
+}
+.goodsItem {
+  position: relative;
+  height: 60px;
+  line-height: 60px;
+  padding-left: 60px;
+  overflow: hidden; 
+  transition: height .3s ease-in-out;
+}
+.goodsItem::after {
+  right: 5%;
+  width: 90%;
+  border-bottom: 1rpx solid #fafafa;
+}
+.hiddenLine::after {
+  display: none;
+}
+.goodsLogo {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  border-radius: 50%;
+}
+.cartItemAmount, .cartItemPrice {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  width: 70px;
+  text-align: right;
+  display: inline-block;
+  padding-right: 5px;
+  color: #fc661f;
+}
+.cartItemAmount {
+  right: 80px;
+}
+.toggleShowGoods {
+  text-align: center;
+  font-size: 12px;
+  height: 60px;
+  width: 100%;
+  left: 0;
+  line-height: 90px;
+  color: #b0b0b0;
+  position: absolute;
+  bottom: 0;
+  background: -webkit-gradient(linear, 0 0, 0 40, from(rgba(255, 255, 255, 0.15)), to(rgba(255, 255, 255, 1)));
+}
+.noBgColor {
+  background: none;
+}
+.promotionItem, .pickedConponItem {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 10px;
+  font-size: 13px;
+  position: relative;
+  clear: both;
+}
+.promotionItem::after, .pickedConponItem::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 2.5%;
+  width: 95%;
+  height: 0;
+  border-top: 1rpx solid #fafafa;
+}
+.savePrice {
+  color: #fc661f;
+  float: right;
+}
+.pickCoupon {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 10px;
+  position: relative;
+}
+.picker {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #acacac;
+}
+.paySummary {
+  height: 46px;
+  line-height: 46px;
+  text-align: right;
+  padding: 0 10px;
+  background: #ffffff;
+}
+.saveInfo, .payInfo {
+  font-size: 18px;
+  display: inline-block;
+  width: 35%;
+}
+.splitTop {
+  position: relative;
+  border-top: 1rpx dashed #e3e3e3;
+}
+.splitTop::before, .splitTop::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: #ececec;
+}
+.splitTop::after {
+  left: auto;
+  right: -4px;
+}
+.moneySign {
+  font-size: .75em;
+}
+.comments {
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 20px;
+  height: 48px;
+  line-height: 48px;
+  background: #ffffff;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+.paybar {
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #ffffff;
+  padding-left: 10px;
+  box-sizing: border-box;
+}
+.payBtn {
+  font-size: 18px;
+  width: 140px;
+  height: 100%;
+  color: #ffffff;
+  background: #fc661f;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+}
+.loading {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+.loadingBox, .loadingBox image {
+  width: 45px;
+  height: 45px;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: rgba(0, 0, 0, 0.35);
+}
+.loadingBox image {
+  width: 45%;
+  height: 45%;
+  background: transparent;
+}
+.pickTakeTime, .addComments, .pickCoupons {
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+  background: #ffffff;
+  transition: bottom .3s ease-in-out;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.pickTakeTime .storeMsg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  line-height: 10px;
+  font-size: 10px;
+  color: red;
+}
+.pickTakeTime .pickTitle {
+  line-height: 40px;
+}
+.pickTitle {
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  position: relative;
+  border-bottom: 1rpx solid #eaeaea;
+  z-index: 2;
+  background: #fff;
+}
+.pickTitle .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45px;
+  height: 45px;
+  line-height: 45px;
+  font-weight: 100;
+  font-size: 28px;
+  text-align: center;
+  color: #acacac;
+}
+.pickTimeContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.pikerLeft {
+  position: absolute;
+  left: 0;
+  top: 0; 
+  width: 30%;
+  height: 100%;
+  padding-top: 45px;
+  background: #fafafa;
+  box-sizing: border-box;
+  z-index: 1;
+}
+.pickerDayItem {
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  border-bottom: 1rpx solid #f6f6f6;
+}
+.pickerDayItem.cur {
+  background: #ffffff;
+}
+.pickerDayItem:last-child {
+  border-bottom: none;
+}
+.pikerRight {
+  position: absolute;
+  padding-top: 45px;
+  padding-left: 30%;
+  height: 100%;
+  overflow: follow;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+.pickerTimeItem {
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  position: relative;
+}
+.pickTimeOn {
+  color: #fc661f;
+}
+.pickerTimeItem::after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: 30%;
+  bottom: 0;
+  width: 40%;
+  height: 0;
+  border-bottom: 1rpx dashed #efefef; 
+}
+.pickerTimeItem:last-child::after {
+  display: none;
+}
+.textarea {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+.addComments {
+  border-top: 1rpx solid #eaeaea;
+  transition: top .3s ease-in-out;
+}
+.addComments > input {
+  position: absolute;
+  bottom: 0;
+  left: -2px;
+  width: 1px;
+  height: 0;
+  line-height: 0;
+  overflow: hidden;
+  background: #ffffff;
+  color: #ffffff;
+}
+.pickCouponContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-top: 45px;
+  width: 100%;
+  height: 100%;
+  overflow: follow;
+  background: #f6f6f6;
+  box-sizing: border-box;
+}
+.couponList {
+  padding: 5px 15px 10px;
+}
+.couponItem {
+  margin-top: 10px;
+  width: 100%;
+  box-shadow: 0px 0px 2px 0px #eaeaea;
+  background: #ffffff;
+}
+.couponDetail {
+  position: relative;
+  height: 80px;
+  overflow: hidden;
+}
+.itemLeft {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 75%;
+  height: 100%;
+  padding: 15px 0 5px 12px;
+}
+.couponName {
+  font-size: 1.3em;
+  color: #777777;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.couponSummary {
+  padding-top: 5px;
+  color: #aaaaaa;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.itemRight {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 25%;
+  height: 100%;
+  padding: 12px 20px 5px 0;
+  text-align: right;
+}
+.couponSave {
+  color: #fc661f;
+  font-size: 25px;
+}
+.couponlimit {
+  color: #aaaaaa;
+}
+.couponSplit {
+  position: relative;
+}
+.couponSplit>view {
+  width: 96%;
+  height: 0;
+  margin: auto;
+  border-bottom: 1rpx dashed #dcdcdc;
+}
+.couponSplit::before, .couponSplit::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background: #f6f6f6;
+}
+.couponSplit::after {
+  left: auto;
+  right: -5px;
+}
+.couponDate {
+  color: #999999;
+  height: 30px;
+  line-height: 30px;
+  text-align: right;
+  padding: 0 12px;
+  box-sizing: border-box;
+  font-size: .75em;
+}
+.pickedCouponCur .itemRight::before, .pickedCoupon .itemRight::before {
+  content: '✓';
+  display: inline-block;
+  position: absolute;
+  top: -2px;
+  right: 0px;
+  font-size: 1.2em;
+  border-top: 10px;
+  color: #ffffff;
+  z-index: 1;
+}
+.pickedCouponCur .itemRight::after, .pickedCoupon .itemRight::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  background: #fc661f;
+  border-bottom: 0px;
+  width: 35px;
+  height: 50px;
+  transform: rotate(-45deg);
+}
+.rightNav {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 30px;
+  height: 100%;
+}
+.rightNav image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 16px;
+  height: 16px;
+}
+.emptyList {
+  width: 100%;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  color: #acacac;
+}
+.noUse {
+  height: 80px;
+  line-height: 80px;
+  width: 100%;
+  color: #999999;
+  text-align: center;
+  margin-top: 10px;
+  background: #ffffff;
+  box-shadow: 0px 0px 2px 0px #eaeaea;
+}
+.noUseable {
+  float: left;
+  color: #fc661f;
+}
+.couponSign, .offSign {
+  color: #ffffff;
+  background: #ff625d;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  display: inline-block;
+  margin-right: 4px;
+}
+.offSign {
+  background: #c084e1;
+}

@@ -1,0 +1,5 @@
+<template name="analytics">
+  <view class="accBox">
+    <image src='{{accUrl}}'></image>
+  </view>
+</template>

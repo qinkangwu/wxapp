@@ -1,0 +1,142 @@
+<import src="../../public/toast.wxml"/>
+<import src="../../public/analytics.wxml"/>
+
+<scroll-view class="container">
+  <template is="toast" wx:if="{{toastMsg}}" data="{{toastMsg}}"/>
+  <template is="analytics" wx:if="{{accUrl}}" data="{{accUrl}}"/>
+  <scroll-view class="orderInfo" scroll-y="hidden" style="width: {{_width + 10}}px; padding-bottom: {{payBarHeight}}px;">
+    <view class='scrollBox' style='padding-right: 20px;'>
+      <!-- 取餐信息 -->
+      <view class="takeInfo">
+        <view class="takeAddress">
+          <image class="takeAddressIcon" src="../../static/marker.png" />
+          取餐地点：<text bindtap='showStorePosition' data-store='{{store}}' >{{store && store.location || '门店地址'}}</text>
+        </view>
+        <view class="takeTime" bindtap='toggleShowPickTime'>
+          <image class="takeTimeIcon" src="../../static/picker_{{takeTime ? 'ok' : 'no'}}.png" />
+          取餐时间：<text class='{{takeTime ? "" : "lightOn"}}'>{{takeTime || '请选择'}}</text>
+        </view>
+      </view>
+      <!-- storeProducts -->
+      <view class="tradeDetail">
+        <view class="storeName">
+          <image class="storeIcon" src="../../static/store.png" />
+          {{store.name}}
+        </view>
+        <view class="goodsList">
+          <view class="goodsItem {{(specid == cart.length - 1 || (!showAllGoods && specid) > 0) ? 'hiddenLine' : ''}}" style="height: {{(specid > 1 && !showAllGoods) ? '0px' : '60px'}}" wx:for="{{cart}}" wx:key="cartInfo" wx:for-index="specid" wx:for-item="spec">
+            <image class="goodsLogo" mode="aspectFill" src="{{spec && spec.logo}}@160w.png"></image>
+            <view class='cartItemName'>{{spec.name}}</view>
+            <view class='cartItemAmount'>×{{spec.amount}}</view>
+            <view class='cartItemPrice'>
+              <text class="moneySign">¥</text>{{spec.price * spec.amount}}
+            </view>
+          </view>
+          <view class="toggleShowGoods {{showAllGoods ? 'noBgColor' : ''}}" wx:if="{{specAount > 2}}" bindtap="toggleShowAllGoods"> {{showAllGoods ? '收起' : '展示全部'}} </view>
+        </view>
+        <view class="promationInfo splitTop">
+          <view class='pickedConponItem' wx:if="{{pickedOff}}">
+            <text class='offSign'>减</text>
+            <text>{{pickedOff.name || pickedOff.source.name}}</text>
+            <text class='savePrice'><text class="moneySign">¥</text>-{{pickedOff.subtract || pickedOff.source.subtract}}</text>
+          </view>
+          <view class='pickedConponItem' wx:if="{{pickedCoupn}}">
+            <text class='couponSign'>券</text>
+            <text>{{pickedCoupn.name || pickedCoupn.source.name}}</text>
+            <text class='savePrice'><text class="moneySign">¥</text>-{{pickedCoupn.subtract}}</text>
+          </view>
+          <view class='pickCoupon' bindtap='toggleShowPickCoupon'>
+            选择优惠券
+            <text class="picker" wx:if="{{loadingCoupongs}}">正在获取中...</text>
+            <text class="picker" wx:if="{{!loadingCoupongs}}">{{coupons.length ? (pickedCoupn ? '点击切换' : '点击选择') : '暂无可用'}}</text>
+            <view class="rightNav">
+              <image src="../../static/navRight.png" />
+            </view>
+          </view>
+        </view>
+        <view class="paySummary splitTop">
+          <view class="saveInfo" wx:if="{{savedPrice}}">优惠 <text class="moneySign">¥</text>{{savedPrice}}</view>
+          <view class="payInfo" wx:if="{{cartPriceAll}}">实付 <text class="moneySign">¥</text>{{cartPriceAll}}</view>
+        </view>
+      </view>
+      <!-- add comments -->
+      <view class="comments" bindtap='toggleShowComments'>
+        {{comments ? '备注: ' : '添加备注'}}
+        <text>{{comments}}</text>
+        <view class="rightNav">
+          <image src="../../static/navRight.png" />
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  <!-- loading -->
+  <scroll-view class="loading" bindtap="hideLayers" hidden="{{!loading && !showPickerTime && !showPickerCoupon && !showAddComments}}">
+    <view class="loadingBox" hidden='{{!loading}}'>
+      <image src="../../static/loading.gif"></image>
+    </view>
+  </scroll-view>
+  <!-- payBar -->
+   <view class="paybar">
+    <view class="payInfo">合计：<text class="moneySign">¥</text>{{cartPriceAll}}</view>
+    <view class="payBtn" bindtap="getPayInfo">{{payRequest? "请求中，请等待" : "支付"}}</view>
+  </view>
+  <!-- pick take time -->
+  <view class='pickTakeTime' style='bottom: {{showPickerTime ? 0 : -1 * pickerBoxHeight}}px; height: {{pickerBoxHeight}}px;'>
+    <view class='pickTitle'>
+      请选择预计取餐时间
+      <text class='storeMsg'>当前点餐门店: {{store.name}}</text>
+      <view class='close' bindtap='toggleShowPickTime'>×</view>
+    </view>
+    <view class='pickTimeContainer'>
+      <view class='pikerLeft'>
+        <view bindtap='makePickData' data-index='{{indexDay}}' class='pickerDayItem {{dayIndex == indexDay ? "cur" : ""}}' wx:for="{{pickDayArr}}" wx:key="pickDay" wx:for-index="indexDay" wx:for-item="day">
+          {{day}}
+        </view>
+      </view>
+      <scroll-view class='pikerRight' scroll-y="hidden">
+        <view bindtap='makePickTime' style="margin-top: {{time < 0 ? 10 : 0}}px" data-value='{{time}}' class='pickerTimeItem' hover-class='pickTimeOn' wx:for="{{pickTimeArr}}" wx:key="pickTime" wx:for-index="indexTime" wx:for-item="time">
+          <text wx:if='{{time > 0}}'>{{time % 1 == 0.5 ? ((time - 0.5) + ':30 ~ ' + (time + 0.5) + ':00') : (time + ':00 ~ ' + (time) + ':30')}}</text>
+          <text wx:if='{{time < 0}}'>立即取餐</text>
+          {{item}}
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+  <!-- add comments -->
+  <view class='addComments' style='{{ _inIos ? "bottom" : "top" }}: {{showAddComments ? 0 : (_inIos ? -0.5 : -1) * pickerBoxHeight}}px; height: {{(_inIos ? 0.5 : 1) * pickerBoxHeight}}px;'>
+    <scroll-view scroll-y="hidden" class='textarea'>
+      {{comments || '请输入你要备注的信息'}}
+    </scroll-view>
+    <input bindinput='setComment' bindblur='toggleShowComments' type='text' focus='{{!!showAddComments}}'></input>
+  </view>
+  <!-- pick coupons -->
+  <view class='pickCoupons' style='bottom: {{showPickerCoupon ? 0 : -1 * pickerBoxHeight}}px; height: {{pickerBoxHeight}}px;'>
+    <view class='pickTitle'>
+      请选择优惠券
+      <view class='close' bindtap='toggleShowPickCoupon'>×</view>
+    </view>
+    <scroll-view class='pickCouponContainer' scroll-y="hidden">
+      <view wx:if="{{!coupons || coupons.length == 0}}" class='emptyList'>～暂无可用优惠券～</view>
+      <view class="couponList">
+        <view bindtap='tidyGoodsInfo' data-coupon='{{C}}' class='couponItem {{pickedCoupn.id == C.id ? "pickedCouponCur" : ""}}' hover-class='{{C.useable ? "pickedCoupon" : ""}}' wx:for="{{coupons}}" wx:key="pickCoupon" wx:for-index="indexCoupon" wx:for-item="C">
+          <view class="couponDetail">
+            <view class='itemLeft'>
+              <view class='couponName'>{{C.name || C.source && C.source.name}}</view>
+              <view class='couponSummary'>{{C.description || C.source && C.source.description}}</view>
+            </view>
+            <view class='itemRight'>
+              <view class='couponSave'><text class="moneySign">¥</text> {{C.subtract}}</view>
+              <view class='couponlimit'>满{{C.trigger || C.source.trigger}}可用</view>
+            </view>
+          </view>
+          <view class='couponSplit'><view></view></view>
+          <view class='couponDate'>
+            <text class='noUseable'>{{!C.useable && "暂不可用" || ''}}</text>
+            可用时间: {{C.startDateStr}} ~ {{C.expireDateStr}}
+          </view>
+        </view>
+        <view wx:if="{{coupons && coupons.length}}" bindtap='tidyGoodsInfo' data-coupon='{{null}}' class="noUse"> 不使用优惠券 </view>
+      </view>
+    </scroll-view>
+  </view>
+ </scroll-view> 

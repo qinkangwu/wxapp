@@ -1,0 +1,16 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/payOrder/index",
+    "pages/orderDetail/index",
+    "pages/orderList/index",
+    "pages/storeList/index",
+    "pages/easypay/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "BABI",
+    "navigationBarTextStyle":"black"
+  }
+}

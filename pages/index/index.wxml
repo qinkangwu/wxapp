@@ -1,0 +1,102 @@
+<import src="../../public/toast.wxml"/>
+<import src="../../public/analytics.wxml"/>
+
+<scroll-view class="container">
+  <template is="toast" wx:if="{{toastMsg}}" data="{{toastMsg}}"/>
+  <template is="analytics" wx:if="{{accUrl}}" data="{{accUrl}}"/>
+  <view wx:if="{{store}}" class="storeInfo {{store && goodList.length ? 'headerBg' : ''}}" style="height: {{storeInfoHeight}}px">
+    <view class="changeStore" bindtap="changeStore">
+      <image class='locator' src="../../static/location.png" style="height: 15px; width: 15px;" />
+      <text>{{store && store.name || ''}}</text>
+      <image src="../../static/navRightWhite.png" style="height: 10px; width: 10px;" />
+    </view>
+    <view class="easyPay" bindtap="toEasyPay" wx:if='{{showEasyPay}}'>
+      <image src="../../static/scan.png" style="height: 25px; width: 25px;" />
+      <text class='textInfo'>扫码</text>
+    </view>
+    <view class="tradeCenter" bindtap="toTradeList" >
+      <view class="unFinishTrades" wx:if="{{unFinishTrades}}">{{unFinishTrades}}</view>
+      <image src="../../static/trades.png" style="height: 25px; width: 25px;" />
+      <text class='textInfo'>订单</text>
+    </view>
+  </view>
+  <view class="contentBox" bindtap="hideMiniCart" style="padding-top: {{storeInfoHeight}}px; padding-bottom: {{(cartAmountTotal ? cartBarHeight : 0) + (pormotions.length ? promotionBarheight : 0)}}px">
+    <!-- nav bar -->
+    <scroll-view class="navBar" scroll-into-view="{{scrollNavId}}" scroll-y="hidden" style="height: {{containerHeight + (cartAmountTotal ?  0 :  cartBarHeight) - (pormotions.length ? promotionBarheight : 0)}}px" scroll-with-animation="{{true}}" hidden="{{loading}}">
+      <view class="navItem {{cate.lightOn ? 'cur' : ''}}" bindtap="navLightOn" data-cate="{{cate}}" id="nav{{index}}" wx:for="{{goodList}}" wx:key="nav" wx:for-index="index" wx:for-item="cate">
+        <view class="lightOn"></view>
+        <view class="navDetail" data-value="{{cate}}">
+          <view class="navName">{{cate && cate.name}}</view>
+        </view>
+      </view>
+    </scroll-view>
+    <!-- goodsList -->
+    <scroll-view class="goodsList" bindscroll="scrollOnGoods" scroll-into-view="{{scrollCateId || 'cate0'}}" scroll-y="hidden" style="height: {{containerHeight + (cartAmountTotal ?  0 :  cartBarHeight) - (pormotions.length ? promotionBarheight : 0)}}px" enable-back-to-top="{{true}}" scroll-with-animation="{{true}}" hidden="{{loading}}">
+      <view class="goodsPart" id="cate{{index}}" wx:for="{{goodList}}" wx:key="subNav" wx:for-index="index" wx:for-item="cate">
+        <view class="cateName" style="height: {{cateNavHeight}}px;">{{cate.name}}</view>
+        <view class="goodsItem" id="goods{{index}}{{subIndex}}" wx:for="{{cate.sons}}" wx:key="subNav" wx:for-index="subIndex" wx:for-item="goods" style="height: {{goodsItemHeight}}px;">
+          <image class="goodsLogo" mode="aspectFill" src="{{goods && goods.frontLogo}}@160w.png"></image>
+          <view class="goodsName">{{goods && goods.name}}</view>
+          <view class="goodsPrice"><text class="moneySign">¥</text>{{goods.price}}</view>
+          <view class="addToCart">
+            <view class="reduceOne" bindtap="addToCart" data-amount="{{-1}}" data-goods="{{goods}}" hidden="{{!cart[goods.storeProductSpecId]}}">
+              <image class="absoluteCenter reduceIcon" src="../../static/cartReduce.png" />
+            </view>
+            <view class="amount" hidden="{{!cart[goods.storeProductSpecId]}}">{{cart[goods.storeProductSpecId] && cart[goods.storeProductSpecId]['amount'] || 0}}</view>
+            <view class="addOne" bindtap="addToCart" data-amount="{{1}}"data-goods="{{goods}}">
+              <image class="absoluteCenter addIcon" src="../../static/cartAdd.png" />
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    <!-- loading -->
+    <scroll-view class="loading" hidden="{{!loading && !showMiniCart}}" style="height: {{storeInfoHeight + containerHeight + cartBarHeight}}px">
+        <view class="loadingBox" hidden="{{!loading}}">
+          <image src="../../static/loading.gif"></image>
+        </view>
+    </scroll-view>
+  </view>
+  <!-- Mini Cart -->
+  <view class="miniCart" style='height: {{(!showMiniCart || !cartAmountTotal) ? "0px" : "auto"}} ;bottom: {{(!showMiniCart || !cartAmountTotal) ? -1 * containerHeight : 0}}px; padding-bottom: {{cartBarHeight}}px'>
+    <view class="title"> 已选商品 <text bindtap='clearCart'>清空购物车</text> </view>
+    <scroll-view class="cartItems" scroll-y="hidden" style="max-height: {{containerHeight * 0.4}}px;">
+      <view class="miniCartItem" id="cartItem{{specid}}" wx:for="{{cart}}" wx:key="miniCart" wx:for-index="specid" wx:for-item="spec">
+        <view class='cartItemName'>{{spec.name}}</view>
+        <view class='cartItemPrice'>
+          <text>¥</text>{{spec.price * spec.amount}}
+        </view>
+        <view class="addToCart">
+          <view class="reduceOne" bindtap="addToCart" data-amount="{{-1}}" data-goods="{{spec}}">
+            <image class="absoluteCenter reduceIcon" src="../../static/cartReduce.png" />
+          </view>
+          <view class='amount'>{{spec.amount}}</view>
+          <view class="addOne" bindtap="addToCart" data-amount="{{1}}"data-goods="{{spec}}">
+            <image class="absoluteCenter addIcon" src="../../static/cartAdd.png" />
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  <!-- cart bar -->
+  <view class="cartBar" style="height: {{cartAmountTotal ? cartBarHeight : 0}}px">
+    <!-- promation bar -->
+    <view class="promitionInfo" wx:if="{{pormotions.length && !showMiniCart}}" style='height: {{promotionBarheight}}px; line-height: {{promotionBarheight}}px;'>
+      <swiper indicator-dots="{{false}}" autoplay="{{true}}" interval="{{5000}}" duration="{{300}}">
+        <block wx:for="{{pormotions}}" wx:key="pormotion">
+          <swiper-item>
+            <text class="swiperItem">{{item}}</text>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+    <view class="paySummary">
+      <view class="cartIcon" bindtap="toggleMiniCart">
+        <image src="/static/cart.png"></image>
+        <view class="totalAmount" wx:if="{{cartAmountTotal}}">{{cartAmountTotal || ''}}</view>
+      </view>
+      <view class="totalPrice">¥<text>{{cartPriceTotal || '0.00'}}</text> 元</view>
+      <view class="pay" bindtap='goToPay'>去结算</view>
+    </view>
+  </view>
+</scroll-view>
